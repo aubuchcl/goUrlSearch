@@ -42,7 +42,6 @@ func main() {
 			continue
 		} else {
 			z := strings.Count(strippedHTML, string(c))
-			//fmt.Println(reflect.TypeOf(c), string(c))
 			xyz = append(xyz, character.Character{string(c), z})
 
 		}
