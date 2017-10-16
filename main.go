@@ -47,38 +47,11 @@ func main() {
 
 		}
 	}
-	//fmt.Println(xyz)
-	// stringSlice := stripResponse(innerHTML)
-	// charOnlySlice := charSlice(stringSlice)
+
 	charSliceSort := charSort(xyz)
 	fmt.Println(charSliceSort)
 
-	// if 12 == 23 {
-	// 	fmt.Println(stringSlice)
-	// 	fmt.Println(charSliceSort)
-	// 	fmt.Println(innerHTML)
-	// }
-	//fmt.Println(charOnlySlice)
-
 }
-
-// func stripResponse(responseString string) []string {
-// 	htmlSlice := strings.Split(responseString, " ")
-// 	return htmlSlice
-// }
-
-// //function that takes a slice and makes a slice of chars out of it.
-// func charSlice(slc []string) []character {
-
-// 	var newCharSlice []character
-// 	for _, s := range slc {
-// 		for _, c := range string(s) {
-// 			newCharSlice = append(newCharSlice, character{string(c), 0})
-// 		}
-// 	}
-
-// 	return newCharSlice
-// }
 
 // //looking to compare newCharSlice[index].char
 func charSort(slc []character) []character {
