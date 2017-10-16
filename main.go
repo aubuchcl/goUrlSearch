@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
+	"sort"
 	"strings"
 
 	"github.com/aubuchcl/httpParser/strip"
 )
-
 
 type character struct {
 	char  string
@@ -21,7 +21,7 @@ func main() {
 	client := &http.Client{
 	//CheckRedirect: http.Redirect(w ResponseWriter, r *Request, url string, code int),
 	}
-	bs := make([]byte, 99999)
+	bs := make([]byte, 32*500)
 
 	resp, err := client.Get("http://golang.org")
 	//resp, err := client.Get("http://www.lipsum.com")
@@ -30,13 +30,18 @@ func main() {
 	fmt.Println(err)
 
 	stringSlice := stripResponse(string(bs))
-	//charOnlySlice := charSlice(stringSlice)
-	fmt.Println(stringSlice)
+	charOnlySlice := charSlice(stringSlice)
+	charSliceSort := charSort(charOnlySlice)
+
+	if 12 == 23 {
+		fmt.Println(stringSlice)
+		fmt.Println(charSliceSort)
+	}
 	//fmt.Println(charOnlySlice)
+
 }
 
 func stripResponse(responseString string) []string {
-	var formattedSlice []string
 
 	//replace this with a regex if you have time.
 	innerHTML := strip.StripTags(responseString)
@@ -48,22 +53,9 @@ func stripResponse(responseString string) []string {
 	//innerHTML = strings.Replace(innerHTML, " ", "", -1)
 
 	htmlSlice := strings.Split(innerHTML, " ")
-	for _, piece := range htmlSlice {
-		if piece != "" || false {
-			formattedSlice = append(formattedSlice, piece)
-		}
-	}
-	//whitespace was not being extracted in first loop this is
-	//a workaround that gets the text from doc without junk
-	noWhitespaceString := strings.Join(formattedSlice, ",")
-
-	noWhitespaceString = strings.Replace(noWhitespaceString, " ", "", -1)
-	noWhitespaceString = strings.Replace(noWhitespaceString, ",", "", -1)
-	htmlSlice = strings.Split(noWhitespaceString, "")
-
 	fmt.Println(htmlSlice)
 
-	return formattedSlice
+	return htmlSlice
 }
 
 //function that takes a slice and makes a slice of chars out of it.
@@ -71,8 +63,8 @@ func charSlice(slc []string) []character {
 
 	var newCharSlice []character
 	for _, s := range slc {
-		if s != "" {
-			newCharSlice = append(newCharSlice, character{s, 0})
+		for _, c := range string(s) {
+			newCharSlice = append(newCharSlice, character{string(c), 0})
 		}
 	}
 
@@ -81,5 +73,9 @@ func charSlice(slc []string) []character {
 
 //looking to compare newCharSlice[index].char
 func charSort(slc []character) []character {
+	sort.SliceStable(slc, func(i, j int) bool {
+		return slc[i].char < slc[j].char
+	})
+	fmt.Println("By Char:", slc)
 	return slc
 }
