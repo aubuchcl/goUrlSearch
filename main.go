@@ -26,9 +26,7 @@ func main() {
 		url: "",
 	}
 
-	client := &http.Client{
-	//CheckRedirect: http.Redirect(w ResponseWriter, r *Request, url string, code int),
-	}
+	client := &http.Client{}
 	cliArgs := os.Args
 
 	for _, u := range cliArgs {
