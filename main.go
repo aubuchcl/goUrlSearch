@@ -15,14 +15,14 @@ import (
 func main() {
 
 	//useURL := urlstring.Urlstring{}
-	var useURL map[string]string
+	var useURL string
 
 	client := &http.Client{}
 	cliArgs := os.Args
 
 	for _, u := range cliArgs {
 		if isValidURL(u) == true {
-			useURL["url"] = u
+			useURL = u
 		}
 	}
 
@@ -30,7 +30,7 @@ func main() {
 
 	//resp, err := client.Get("http://golang.org")
 	// resp, err := client.Get("http://www.lipsum.com")
-	resp, err := client.Get(useURL["url"])
+	resp, err := client.Get(useURL)
 	resp.Body.Read(bs)
 	//fmt.Println(string(bs))
 
