@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"net/http"
 	"os"
+	"regexp"
 	"strings"
 
 	"github.com/aubuchcl/httpParser/character"
-	"github.com/aubuchcl/httpParser/strip"
 	"github.com/aubuchcl/httpParser/urlstring"
 )
 
@@ -31,22 +31,31 @@ func main() {
 	// resp, err := client.Get("http://www.lipsum.com")
 	resp, err := client.Get(useURL.Url)
 	resp.Body.Read(bs)
+	//fmt.Println(string(bs))
+	//|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>
+	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
+	//fmt.Println(regxp, err)
+
+	strippedHTML := regxp.ReplaceAllString(string(bs), "")
+
+	//fmt.Println(strippedHTML)
+
 	if err != nil {
 		fmt.Println("you broke it")
 	}
-	innerHTML := strip.StripTags(string(bs))
-	//replace this with a regex if you have time.
-	innerHTML = strings.Replace(innerHTML, "\n", "", -1)
-	innerHTML = strings.Replace(innerHTML, "\t", "", -1)
-	innerHTML = strings.Replace(innerHTML, ".", "", -1)
-	innerHTML = strings.Replace(innerHTML, ",", "", -1)
-	innerHTML = strings.Replace(innerHTML, " ", "", -1)
+	// innerHTML := strip.StripTags(string(bs))
+	// //replace this with a regex if you have time.
+	// innerHTML = strings.Replace(innerHTML, "\n", "", -1)
+	// innerHTML = strings.Replace(innerHTML, "\t", "", -1)
+	// innerHTML = strings.Replace(innerHTML, ".", "", -1)
+	// innerHTML = strings.Replace(innerHTML, ",", "", -1)
+	// innerHTML = strings.Replace(innerHTML, " ", "", -1)
 	var xyz []character.Character
-	for _, c := range innerHTML {
+	for _, c := range strippedHTML {
 		if c == 0 {
 			continue
 		} else {
-			z := strings.Count(innerHTML, string(c))
+			z := strings.Count(strippedHTML, string(c))
 			//fmt.Println(reflect.TypeOf(c), string(c))
 			xyz = append(xyz, character.Character{string(c), z})
 
@@ -69,26 +78,3 @@ func main() {
 	}
 
 }
-
-// //looking to compare newCharSlice[index].char
-// func charSort(slc []character) []character {
-// 	sort.SliceStable(slc, func(i, j int) bool {
-// 		return slc[i].count > slc[j].count
-// 	})
-// 	//fmt.Println("By Char:", slc)
-// 	return slc
-// }
-
-// func isValidURL(toTest string) bool {
-// 	_, err := url.ParseRequestURI(toTest)
-// 	if err != nil {
-// 		return false
-// 	} else {
-// 		return true
-// 	}
-// }
-
-// func (s *urlstring) findURL(u string) {
-// 	(*s).url = u
-// 	return
-// }
