@@ -47,7 +47,6 @@ func main() {
 	innerHTML := strip.StripTags(string(bs))
 	//replace this with a regex if you have time.
 	innerHTML = strings.Replace(innerHTML, "\n", "", -1)
-	innerHTML = strings.Replace(innerHTML, ",", "", -1)
 	innerHTML = strings.Replace(innerHTML, "\t", "", -1)
 	innerHTML = strings.Replace(innerHTML, ".", "", -1)
 	innerHTML = strings.Replace(innerHTML, ",", "", -1)
