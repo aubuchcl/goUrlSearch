@@ -4,34 +4,24 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
-	"net/url"
 	"os"
-	"sort"
 	"strings"
 
+	"github.com/aubuchcl/httpParser/character"
 	"github.com/aubuchcl/httpParser/strip"
+	"github.com/aubuchcl/httpParser/urlstring"
 )
-
-type urlstring struct {
-	url string
-}
-type character struct {
-	char  string
-	count int
-}
 
 func main() {
 
-	useURL := urlstring{
-		url: "",
-	}
+	useURL := urlstring.Urlstring{}
 
 	client := &http.Client{}
 	cliArgs := os.Args
 
 	for _, u := range cliArgs {
-		if isValidURL(u) == true {
-			useURL.findURL(u)
+		if urlstring.IsValidURL(u) == true {
+			useURL.FindURL(u)
 		}
 	}
 
@@ -39,7 +29,7 @@ func main() {
 
 	//resp, err := client.Get("http://golang.org")
 	// resp, err := client.Get("http://www.lipsum.com")
-	resp, err := client.Get(useURL.url)
+	resp, err := client.Get(useURL.Url)
 	resp.Body.Read(bs)
 	if err != nil {
 		fmt.Println("you broke it")
@@ -51,22 +41,22 @@ func main() {
 	innerHTML = strings.Replace(innerHTML, ".", "", -1)
 	innerHTML = strings.Replace(innerHTML, ",", "", -1)
 	innerHTML = strings.Replace(innerHTML, " ", "", -1)
-	var xyz []character
+	var xyz []character.Character
 	for _, c := range innerHTML {
 		if c == 0 {
 			continue
 		} else {
 			z := strings.Count(innerHTML, string(c))
 			//fmt.Println(reflect.TypeOf(c), string(c))
-			xyz = append(xyz, character{string(c), z})
+			xyz = append(xyz, character.Character{string(c), z})
 
 		}
 	}
 
-	charSliceSort := charSort(xyz)
+	charSliceSort := character.CharSort(xyz)
 
-	mostChar := charSliceSort[0].char
-	numChar := charSliceSort[0].count
+	mostChar := charSliceSort[0].Char
+	numChar := charSliceSort[0].Count
 	fmt.Println(mostChar, "occurs", numChar, "times")
 
 	scanner := bufio.NewScanner(os.Stdin)
@@ -81,24 +71,24 @@ func main() {
 }
 
 // //looking to compare newCharSlice[index].char
-func charSort(slc []character) []character {
-	sort.SliceStable(slc, func(i, j int) bool {
-		return slc[i].count > slc[j].count
-	})
-	//fmt.Println("By Char:", slc)
-	return slc
-}
+// func charSort(slc []character) []character {
+// 	sort.SliceStable(slc, func(i, j int) bool {
+// 		return slc[i].count > slc[j].count
+// 	})
+// 	//fmt.Println("By Char:", slc)
+// 	return slc
+// }
 
-func isValidURL(toTest string) bool {
-	_, err := url.ParseRequestURI(toTest)
-	if err != nil {
-		return false
-	} else {
-		return true
-	}
-}
+// func isValidURL(toTest string) bool {
+// 	_, err := url.ParseRequestURI(toTest)
+// 	if err != nil {
+// 		return false
+// 	} else {
+// 		return true
+// 	}
+// }
 
-func (s *urlstring) findURL(u string) {
-	(*s).url = u
-	return
-}
+// func (s *urlstring) findURL(u string) {
+// 	(*s).url = u
+// 	return
+// }
