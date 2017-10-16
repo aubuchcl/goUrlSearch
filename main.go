@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bufio"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -59,15 +58,16 @@ func main() {
 	numChar := charSliceSort[0].Count
 	fmt.Println(mostChar, "occurs", numChar, "times")
 
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		if scanner.Text() == "close" {
-			resp.Body.Close()
-			os.Exit(1)
-		}
-		fmt.Println(scanner.Text())
-	}
-
+	// scanner := bufio.NewScanner(os.Stdin)
+	// for scanner.Scan() {
+	// 	if scanner.Text() == "close" {
+	// 		resp.Body.Close()
+	// 		os.Exit(1)
+	// 	}
+	// 	fmt.Println(scanner.Text())
+	// }
+	serveScan()
+	resp.Body.Close()
 }
 
 //IsValidURL use this to check if a url is valid
