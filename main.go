@@ -17,21 +17,11 @@ type character struct {
 }
 
 func main() {
-
 	cliArgs := os.Args
 
-	//fmt.Println(cliArgs)
-	for _, arg := range cliArgs {
-		fmt.Println(arg)
-	}
+	inputArgIndex := len(cliArgs) - 1
 
-	scanner := bufio.NewScanner(os.Stdin)
-	for scanner.Scan() {
-		if scanner.Text() == "close" {
-			os.Exit(1)
-		}
-		fmt.Println(scanner.Text())
-	}
+	urlArg := cliArgs[inputArgIndex]
 
 	//fmt.Println("hello world")
 
@@ -41,10 +31,13 @@ func main() {
 	bs := make([]byte, 32*500)
 
 	//resp, err := client.Get("http://golang.org")
-	resp, err := client.Get("http://www.lipsum.com")
+	// resp, err := client.Get("http://www.lipsum.com")
+	resp, err := client.Get(urlArg)
 
 	resp.Body.Read(bs)
-	fmt.Println(err)
+	if err != nil {
+		fmt.Println(err, "please enter a valid url")
+	}
 	innerHTML := strip.StripTags(string(bs))
 	//replace this with a regex if you have time.
 	innerHTML = strings.Replace(innerHTML, "\n", "", -1)
@@ -66,8 +59,17 @@ func main() {
 	}
 
 	charSliceSort := charSort(xyz)
-	if 10 == 12 {
-		fmt.Println(charSliceSort)
+
+	mostChar := charSliceSort[0].char
+	numChar := charSliceSort[0].count
+	fmt.Println(mostChar, "occurs", numChar, "times")
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		if scanner.Text() == "close" {
+			os.Exit(1)
+		}
+		fmt.Println(scanner.Text())
 	}
 
 }
