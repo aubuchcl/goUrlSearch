@@ -38,18 +38,10 @@ func main() {
 
 	strippedHTML := regxp.ReplaceAllString(string(bs), "")
 
-	//fmt.Println(strippedHTML)
-
 	if err != nil {
 		fmt.Println("you broke it")
 	}
-	// innerHTML := strip.StripTags(string(bs))
-	// //replace this with a regex if you have time.
-	// innerHTML = strings.Replace(innerHTML, "\n", "", -1)
-	// innerHTML = strings.Replace(innerHTML, "\t", "", -1)
-	// innerHTML = strings.Replace(innerHTML, ".", "", -1)
-	// innerHTML = strings.Replace(innerHTML, ",", "", -1)
-	// innerHTML = strings.Replace(innerHTML, " ", "", -1)
+
 	var xyz []character.Character
 	for _, c := range strippedHTML {
 		if c == 0 {
