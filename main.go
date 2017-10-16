@@ -75,6 +75,7 @@ func main() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		if scanner.Text() == "close" {
+			resp.Body.Close()
 			os.Exit(1)
 		}
 		fmt.Println(scanner.Text())
