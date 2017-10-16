@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"sort"
 	"strings"
@@ -11,32 +12,39 @@ import (
 	"github.com/aubuchcl/httpParser/strip"
 )
 
+type urlstring struct {
+	url string
+}
 type character struct {
 	char  string
 	count int
 }
 
 func main() {
-	cliArgs := os.Args
 
-	inputArgIndex := len(cliArgs) - 1
-
-	urlArg := cliArgs[inputArgIndex]
-
-	//fmt.Println("hello world")
+	useURL := urlstring{
+		url: "",
+	}
 
 	client := &http.Client{
 	//CheckRedirect: http.Redirect(w ResponseWriter, r *Request, url string, code int),
 	}
+	cliArgs := os.Args
+
+	for _, u := range cliArgs {
+		if isValidURL(u) == true {
+			useURL.findURL(u)
+		}
+	}
+
 	bs := make([]byte, 32*500)
 
 	//resp, err := client.Get("http://golang.org")
 	// resp, err := client.Get("http://www.lipsum.com")
-	resp, err := client.Get(urlArg)
-
+	resp, err := client.Get(useURL.url)
 	resp.Body.Read(bs)
 	if err != nil {
-		fmt.Println(err, "please enter a valid url")
+		fmt.Println("you broke it")
 	}
 	innerHTML := strip.StripTags(string(bs))
 	//replace this with a regex if you have time.
@@ -81,4 +89,18 @@ func charSort(slc []character) []character {
 	})
 	//fmt.Println("By Char:", slc)
 	return slc
+}
+
+func isValidURL(toTest string) bool {
+	_, err := url.ParseRequestURI(toTest)
+	if err != nil {
+		return false
+	} else {
+		return true
+	}
+}
+
+func (s *urlstring) findURL(u string) {
+	(*s).url = u
+	return
 }
