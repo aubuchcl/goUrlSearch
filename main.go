@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"net/http"
+	"os"
 	"sort"
 	"strings"
 
@@ -16,15 +18,30 @@ type character struct {
 
 func main() {
 
-	fmt.Println("hello world")
+	cliArgs := os.Args
+
+	//fmt.Println(cliArgs)
+	for _, arg := range cliArgs {
+		fmt.Println(arg)
+	}
+
+	scanner := bufio.NewScanner(os.Stdin)
+	for scanner.Scan() {
+		if scanner.Text() == "close" {
+			os.Exit(1)
+		}
+		fmt.Println(scanner.Text())
+	}
+
+	//fmt.Println("hello world")
 
 	client := &http.Client{
 	//CheckRedirect: http.Redirect(w ResponseWriter, r *Request, url string, code int),
 	}
 	bs := make([]byte, 32*500)
 
-	resp, err := client.Get("http://golang.org")
-	//resp, err := client.Get("http://www.lipsum.com")
+	//resp, err := client.Get("http://golang.org")
+	resp, err := client.Get("http://www.lipsum.com")
 
 	resp.Body.Read(bs)
 	fmt.Println(err)
@@ -49,7 +66,9 @@ func main() {
 	}
 
 	charSliceSort := charSort(xyz)
-	fmt.Println(charSliceSort)
+	if 10 == 12 {
+		fmt.Println(charSliceSort)
+	}
 
 }
 
