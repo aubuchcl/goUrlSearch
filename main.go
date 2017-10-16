@@ -4,24 +4,25 @@ import (
 	"bufio"
 	"fmt"
 	"net/http"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
 
 	"github.com/aubuchcl/httpParser/character"
-	"github.com/aubuchcl/httpParser/urlstring"
 )
 
 func main() {
 
-	useURL := urlstring.Urlstring{}
+	//useURL := urlstring.Urlstring{}
+	var useURL map[string]string
 
 	client := &http.Client{}
 	cliArgs := os.Args
 
 	for _, u := range cliArgs {
-		if urlstring.IsValidURL(u) == true {
-			useURL.FindURL(u)
+		if isValidURL(u) == true {
+			useURL["url"] = u
 		}
 	}
 
@@ -29,13 +30,11 @@ func main() {
 
 	//resp, err := client.Get("http://golang.org")
 	// resp, err := client.Get("http://www.lipsum.com")
-	resp, err := client.Get(useURL.Url)
+	resp, err := client.Get(useURL["url"])
 	resp.Body.Read(bs)
 	//fmt.Println(string(bs))
-	//|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>
-	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
-	//fmt.Println(regxp, err)
 
+	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
 	strippedHTML := regxp.ReplaceAllString(string(bs), "")
 
 	if err != nil {
@@ -68,5 +67,16 @@ func main() {
 		}
 		fmt.Println(scanner.Text())
 	}
+
+}
+
+//IsValidURL use this to check if a url is valid
+func isValidURL(toTest string) bool {
+	_, err := url.ParseRequestURI(toTest)
+	if err != nil {
+		return false
+	}
+
+	return true
 
 }
