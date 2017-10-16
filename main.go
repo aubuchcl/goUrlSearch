@@ -13,7 +13,6 @@ import (
 
 func main() {
 
-	//useURL := urlstring.Urlstring{}
 	var useURL string
 
 	client := &http.Client{}
@@ -27,11 +26,8 @@ func main() {
 
 	bs := make([]byte, 32*500)
 
-	//resp, err := client.Get("http://golang.org")
-	// resp, err := client.Get("http://www.lipsum.com")
 	resp, err := client.Get(useURL)
 	resp.Body.Read(bs)
-	//fmt.Println(string(bs))
 
 	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
 	strippedHTML := regxp.ReplaceAllString(string(bs), "")
@@ -58,14 +54,6 @@ func main() {
 	numChar := charSliceSort[0].Count
 	fmt.Println(mostChar, "occurs", numChar, "times")
 
-	// scanner := bufio.NewScanner(os.Stdin)
-	// for scanner.Scan() {
-	// 	if scanner.Text() == "close" {
-	// 		resp.Body.Close()
-	// 		os.Exit(1)
-	// 	}
-	// 	fmt.Println(scanner.Text())
-	// }
 	serveScan()
 	resp.Body.Close()
 }
