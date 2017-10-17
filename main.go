@@ -15,7 +15,7 @@ func main() {
 
 	client := &http.Client{}
 	cliArgs := os.Args
-
+	// extract this
 	for _, u := range cliArgs {
 		if isValidURL(u) == true {
 			useURL = u
@@ -29,20 +29,17 @@ func main() {
 	if err != nil {
 		fmt.Println("you broke it")
 	}
-	_, ioErr := io.ReadFull(resp.Body, bs)
-	//	fmt.Println(b, err, bs)
+	b, ioErr := io.ReadFull(resp.Body, bs)
+
 	if ioErr != nil {
 		fmt.Println("you broke it from IO", ioErr)
+		fmt.Println("b was ", b)
 	}
 
 	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
 	strippedHTML := regxp.ReplaceAllString(string(bs), "")
 
-	regxpClean, _ := regexp.Compile(`/[^a-zA-Z 0-9]+/g`)
-	strippedHTML = regxpClean.ReplaceAllString(strippedHTML, "")
-	//fmt.Println(strippedHTML)
-
-	chars := make(map[string]int)
+	chars := make(map[string]uint)
 
 	for _, v := range strippedHTML {
 
@@ -79,19 +76,9 @@ func isValidURL(toTest string) bool {
 
 }
 
-// //CharSort use to sort stripped and itemized character slices
-// func CharSort(slc map[string]int) map[string]int {
-// 	//redo this function with regex
-// 	sort.SliceStable(slc, func(i, j int) bool {
-// 		return slc[i].Count > slc[j].Count
-// 	})
-// 	//fmt.Println("By Char:", slc)
-// 	return slc
-// }
-//hashMap find
-func findBig(hm map[string]int) (string, int) {
+func findBig(hm map[string]uint) (string, uint) {
 	s := ""
-	i := 0
+	i := uint(0)
 	abcs := "abcdefghijklmnopqrstuvwxyz"
 	for key, x := range hm {
 		matched, _ := regexp.MatchString(key, abcs)
