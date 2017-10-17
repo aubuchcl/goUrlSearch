@@ -21,8 +21,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	mfChar, mfCharNum := webcrawler.FormatIO(webURL)
-	fmt.Println(mfChar, "occurs", mfCharNum, "times")
+	webcrawler.FormatIO(webURL)
 	webcrawler.ServeScan()
 
 }

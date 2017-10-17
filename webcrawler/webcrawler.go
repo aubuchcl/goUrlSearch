@@ -11,7 +11,7 @@ import (
 )
 
 //FormatIO formats the read data from the passed url
-func FormatIO(s string) (string, uint) {
+func FormatIO(s string) {
 	client := &http.Client{}
 	resp, err := client.Get(s)
 	if err != nil {
@@ -25,7 +25,9 @@ func FormatIO(s string) (string, uint) {
 	freqChar, freqCharCount := sortChars(mappedChars)
 
 	resp.Body.Close()
-	return freqChar, freqCharCount
+
+	fmt.Println(freqChar, "occurs", freqCharCount, "times")
+	return
 
 }
 
