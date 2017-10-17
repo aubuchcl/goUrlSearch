@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"io"
+	"io/ioutil"
 	"net/http"
 	"net/url"
 	"os"
@@ -22,18 +22,16 @@ func main() {
 		}
 	}
 
-	bs := make([]byte, 1000000)
-
 	resp, err := client.Get(useURL)
 	//resp.Body.Read(bs)
 	if err != nil {
 		fmt.Println("you broke it")
 	}
-	b, ioErr := io.ReadFull(resp.Body, bs)
+	bs, ioErr := ioutil.ReadAll(resp.Body)
 
 	if ioErr != nil {
 		fmt.Println("you broke it from IO", ioErr)
-		fmt.Println("b was ", b)
+		fmt.Println("b was ", bs)
 	}
 
 	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
