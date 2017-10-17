@@ -7,7 +7,6 @@ import (
 	"net/url"
 	"os"
 	"regexp"
-	"sort"
 )
 
 func main() {
@@ -23,7 +22,7 @@ func main() {
 		}
 	}
 
-	bs := make([]byte, 100000)
+	bs := make([]byte, 1000000)
 
 	resp, err := client.Get(useURL)
 	//resp.Body.Read(bs)
@@ -33,22 +32,15 @@ func main() {
 	_, ioErr := io.ReadFull(resp.Body, bs)
 	//	fmt.Println(b, err, bs)
 	if ioErr != nil {
-		fmt.Println("you broke it")
+		fmt.Println("you broke it from IO", ioErr)
 	}
 
 	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
 	strippedHTML := regxp.ReplaceAllString(string(bs), "")
 
-	// var xyz []character.Character
-	// for _, c := range strippedHTML {
-	// 	if c == 0 {
-	// 		continue
-	// 	} else {
-	// 		z := strings.Count(strippedHTML, string(c))
-	// 		xyz = append(xyz, character.Character{string(c), z})
-
-	// 	}
-	// }
+	regxpClean, _ := regexp.Compile(`/[^a-zA-Z 0-9]+/g`)
+	strippedHTML = regxpClean.ReplaceAllString(strippedHTML, "")
+	//fmt.Println(strippedHTML)
 
 	chars := make(map[string]int)
 
@@ -64,16 +56,16 @@ func main() {
 		}
 	}
 
-	fmt.Println(chars)
+	//fmt.Println(chars)
 
-	// charSliceSort := character.CharSort(xyz)
+	mfChar, mfCharNum := findBig(chars)
 
-	// mostChar := charSliceSort[0].Char
-	// numChar := charSliceSort[0].Count
-	// fmt.Println(mostChar, "occurs", numChar, "times")
+	fmt.Println(mfChar, "occurs", mfCharNum, "times")
 
 	serveScan()
-	resp.Body.Close()
+	if ioErr == nil {
+		resp.Body.Close()
+	}
 }
 
 //IsValidURL use this to check if a url is valid
@@ -87,12 +79,29 @@ func isValidURL(toTest string) bool {
 
 }
 
-//CharSort use to sort stripped and itemized character slices
-func CharSort(slc map[string]int) map[string]int {
-	//redo this function with regex
-	sort.SliceStable(slc, func(i, j int) bool {
-		return slc[i].Count > slc[j].Count
-	})
-	//fmt.Println("By Char:", slc)
-	return slc
+// //CharSort use to sort stripped and itemized character slices
+// func CharSort(slc map[string]int) map[string]int {
+// 	//redo this function with regex
+// 	sort.SliceStable(slc, func(i, j int) bool {
+// 		return slc[i].Count > slc[j].Count
+// 	})
+// 	//fmt.Println("By Char:", slc)
+// 	return slc
+// }
+//hashMap find
+func findBig(hm map[string]int) (string, int) {
+	s := ""
+	i := 0
+	abcs := "abcdefghijklmnopqrstuvwxyz"
+	for key, x := range hm {
+		matched, _ := regexp.MatchString(key, abcs)
+		if matched == false {
+			continue
+		}
+		if x > i {
+			i = x
+			s = key
+		}
+	}
+	return s, i
 }
