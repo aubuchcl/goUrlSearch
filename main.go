@@ -2,34 +2,27 @@ package main
 
 import (
 	"fmt"
+	"net/url"
 	"os"
 
 	"github.com/aubuchcl/httpParser/webcrawler"
 )
 
 func main() {
+	cliArgs := os.Args
+	if len(cliArgs) != 2 {
+		os.Exit(1)
+	}
 
-	fmt.Println(os.Args[1:])
+	webURL := cliArgs[1]
+	_, err := url.ParseRequestURI(webURL)
+	if err != nil {
+		fmt.Println("please enter a Valid URL and try again")
+		os.Exit(1)
+	}
 
-	// new main function will be
-	// grab url from os.args
-	// var useURL string
-
-	// //validate it
-	// for _, u := range os.Args {
-	// 	_, urlError := url.ParseRequestURI(u)
-	// 	if urlError == nil {
-	// 		useURL = u
-	// 	}
-	// }
-
-	// if err != nil {
-	// 	os.Exit(1)
-	// }
-	mfChar, mfCharNum := webcrawler.FormatIO("http://www.google.com")
-
+	mfChar, mfCharNum := webcrawler.FormatIO(webURL)
 	fmt.Println(mfChar, "occurs", mfCharNum, "times")
-
 	webcrawler.ServeScan()
 
 }
