@@ -35,7 +35,6 @@ func readURL(rc io.ReadCloser) []byte {
 		fmt.Println("Body could not be read ", err)
 	}
 	return bs
-
 }
 
 func stripResponse(bs []byte) string {
