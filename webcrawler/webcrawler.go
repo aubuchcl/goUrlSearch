@@ -12,25 +12,38 @@ import (
 
 //FormatIO formats the read data from the passed url
 func FormatIO(s string) {
+	//init http client
 	client := &http.Client{}
+
+	//get raw info from s(url)
 	resp, err := client.Get(s)
+
+	//check to see if request was successful
 	if err != nil {
 		fmt.Println("there was an error handling your get request: ", err)
 	}
 
+	//capture the response body
 	bs := readURL(resp.Body)
 
+	//strip the response of HTML
 	strippedHTML := stripResponse(bs)
+
+	//make a hashmap of a-z chars from stripped response
 	mappedChars := mapChars(strippedHTML)
+
+	//find the most frequently used char and its frequency
 	freqChar, freqCharCount := sortChars(mappedChars)
 
+	//close response body
 	resp.Body.Close()
 
+	//notify cli user of char frequency
 	fmt.Println(freqChar, "occurs", freqCharCount, "times")
 	return
-
 }
 
+//take in an io.ReadCloser and return a byteslice of its contents
 func readURL(rc io.ReadCloser) []byte {
 	bs, err := ioutil.ReadAll(rc)
 	if err != nil {
@@ -40,6 +53,7 @@ func readURL(rc io.ReadCloser) []byte {
 	return bs
 }
 
+//use regexp to remove HTML and convert byteslice to string
 func stripResponse(bs []byte) string {
 	regxp, err := regexp.Compile(`<(?:[^>=]|='[^']*'|="[^"]*"|=[^'"][^\s>]*)*>`)
 	if err != nil {
@@ -50,6 +64,7 @@ func stripResponse(bs []byte) string {
 	return strippedHTML
 }
 
+//turn the string into a hashmap of character frequency
 func mapChars(s string) map[string]uint {
 	chars := make(map[string]uint)
 	for _, v := range s {
@@ -65,6 +80,7 @@ func mapChars(s string) map[string]uint {
 	return chars
 }
 
+//look through the hashmap and return the char with the highest use
 func sortChars(m map[string]uint) (string, uint) {
 	s := ""
 	i := uint(0)

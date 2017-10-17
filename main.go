@@ -9,11 +9,11 @@ import (
 )
 
 func main() {
+	//cap and validate args
 	cliArgs := os.Args
 	if len(cliArgs) != 2 {
 		os.Exit(1)
 	}
-
 	webURL := cliArgs[1]
 	_, err := url.ParseRequestURI(webURL)
 	if err != nil {
@@ -21,7 +21,9 @@ func main() {
 		os.Exit(1)
 	}
 
+	//give url to webcrawler so it can find most freq chars
 	webcrawler.FormatIO(webURL)
+	//webcrawler watches cli for a command to close program
 	webcrawler.ServeScan()
 
 }
