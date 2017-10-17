@@ -5,7 +5,7 @@ import (
 	"net/url"
 	"os"
 
-	"github.com/aubuchcl/httpParser/ioformat"
+	"github.com/aubuchcl/httpParser/webcrawler"
 )
 
 func main() {
@@ -21,7 +21,7 @@ func main() {
 		}
 	}
 
-	mfChar, mfCharNum := ioformat.FormatIO(useURL)
+	mfChar, mfCharNum := webcrawler.FormatIO(useURL)
 
 	fmt.Println(mfChar, "occurs", mfCharNum, "times")
 

@@ -1,7 +1,8 @@
-package ioformat
+package webcrawler
 
 import (
 	"fmt"
+	"io"
 	"io/ioutil"
 	"net/http"
 	"regexp"
@@ -15,11 +16,7 @@ func FormatIO(s string) (string, uint) {
 		fmt.Println("you broke it")
 	}
 
-	bs, ioErr := ioutil.ReadAll(resp.Body)
-	if ioErr != nil {
-		fmt.Println("you broke it from IO", ioErr)
-		fmt.Println("b was ", bs)
-	}
+	bs := readURL(resp.Body)
 
 	strippedHTML := stripResponse(bs)
 	mappedChars := mapChars(strippedHTML)
@@ -27,6 +24,15 @@ func FormatIO(s string) (string, uint) {
 
 	resp.Body.Close()
 	return freqChar, freqCharCount
+
+}
+
+func readURL(rc io.ReadCloser) []byte {
+	bs, err := ioutil.ReadAll(rc)
+	if err != nil {
+		fmt.Println("Body could not be read ", err)
+	}
+	return bs
 
 }
 
