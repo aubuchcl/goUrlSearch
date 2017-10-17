@@ -12,10 +12,9 @@ func main() {
 	fmt.Println(os.Args[1:])
 
 	// new main function will be
-	//grab url from os.args
+	// grab url from os.args
 	// var useURL string
-	// useURL = ""
-	// fmt.Println(useURL)
+
 	// //validate it
 	// for _, u := range os.Args {
 	// 	_, urlError := url.ParseRequestURI(u)
@@ -23,7 +22,7 @@ func main() {
 	// 		useURL = u
 	// 	}
 	// }
-	fmt.Println(os.Args)
+
 	// if err != nil {
 	// 	os.Exit(1)
 	// }
