@@ -15,7 +15,7 @@ func FormatIO(s string) (string, uint) {
 	client := &http.Client{}
 	resp, err := client.Get(s)
 	if err != nil {
-		fmt.Println("you broke it")
+		fmt.Println("there was an error handling your get request: ", err)
 	}
 
 	bs := readURL(resp.Body)
@@ -32,7 +32,8 @@ func FormatIO(s string) (string, uint) {
 func readURL(rc io.ReadCloser) []byte {
 	bs, err := ioutil.ReadAll(rc)
 	if err != nil {
-		fmt.Println("Body could not be read ", err)
+		fmt.Println("ioutil errored when trying to read: ", rc)
+		fmt.Println("error recieved was: ", err)
 	}
 	return bs
 }
@@ -84,8 +85,9 @@ func ServeScan() {
 	scanner := bufio.NewScanner(os.Stdin)
 	for scanner.Scan() {
 		if scanner.Text() == "close" {
-			os.Exit(1)
+			fmt.Println("Sure.  Closing now")
+			os.Exit(0)
 		}
-		fmt.Println(scanner.Text())
+
 	}
 }
