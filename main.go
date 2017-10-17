@@ -25,6 +25,6 @@ func main() {
 
 	fmt.Println(mfChar, "occurs", mfCharNum, "times")
 
-	serveScan()
+	webcrawler.ServeScan()
 
 }
