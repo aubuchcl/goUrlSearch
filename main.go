@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	//cap and validate args
+	//cap and validate args from command line
 	cliArgs := os.Args
 	if len(cliArgs) != 2 {
 		os.Exit(1)
